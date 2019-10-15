@@ -1,7 +1,7 @@
 # ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
 
 # Twin Peaks
-![Twin Peaks](https://raw.githubusercontent.com/azerothcore/mod-bg-twinpeaks/icon.png)
+![Twin Peaks](https://raw.githubusercontent.com/azerothcore/mod-bg-twinpeaks/master/icon.png)
 
 
 ## Description
@@ -23,9 +23,9 @@ In short words, you become a contributor if you make one of the followings:
 
 This is a Capture The Flag (CTF), like **Warsong Gulch**, the players have to capture 3 flags to win.
 
-![Twin Peaks World Map](https://raw.githubusercontent.com/azerothcore/mod-bg-twinpeaks/images/TP-WorldMap.png)
-![Twin Peaks Load Screen](https://raw.githubusercontent.com/azerothcore/mod-bg-twinpeaks/images/TP-LoadScreen.png)
-![Twin Peaks Zone Area](https://raw.githubusercontent.com/azerothcore/mod-bg-twinpeaks/images/TP-Zone.png)
+![Twin Peaks World Map](https://raw.githubusercontent.com/azerothcore/mod-bg-twinpeaks/master/images/TP-WorldMap.png)
+![Twin Peaks Load Screen](https://raw.githubusercontent.com/azerothcore/mod-bg-twinpeaks/master/images/TP-LoadScreen.png)
+![Twin Peaks Zone Area](https://raw.githubusercontent.com/azerothcore/mod-bg-twinpeaks/master/images/TP-Zone.png)
 
 ## Requirements
 This module requires
