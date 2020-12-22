@@ -19,7 +19,7 @@ In short words, you become a contributor if you make one of the followings:
 - test a few Pull Requests
 - write 3 new wiki pages or (1-2 big one)
 
-Alternatively, you can get this module by donating 150$ to the AzoerhtCore organization. All the money donated to AzerothCore will be used to maintaining the infrastructure and support the community.
+Alternatively, you can get this module by donating 150$ to the AzerothCore organization. All the money donated to AzerothCore will be used to maintaining the infrastructure and support the community.
 
 ## How does the battleground work?
 
