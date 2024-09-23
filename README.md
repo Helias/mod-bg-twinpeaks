@@ -31,7 +31,7 @@ The client data files like DBC, maps, vmaps and mmaps are in [client-data.zip](c
 Download the files and put them in your server/data/ folder, you need to overwrite the old dbc files and just add the others.
 
 **Client-Side**  
-You need to download the [patch-T.MPQ](https://mega.nz/#F!ksFzBSwI!FirOsvqp6cLvo8ShbvX6_Q?Mkt1QapC) and put it in your *WoW/Data/* folder or in your *WoW/Data/enUS/* folder.
+You need to download the [patch-T.MPQ](https://mega.nz/file/U8xEmQQT#av4spdjZx7B7LbtODIsI2eOYzaeUl2fQx5QgECiU8lU) and put it in your *WoW/Data/* folder or in your *WoW/Data/enUS/* folder.
 In case that you want to put the patch file into *WoW/Data/enUS/* folder, you need to rename it to : **patch-enUS-4.MPQ**.
 If you have a different client than enUS rename it with your client-lang name, for example for ruRU client put the patch in *WoW/Data/ruRU/* and rename it as **patch-ruRU-4.MPQ**.
 
