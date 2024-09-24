@@ -20,7 +20,7 @@ INSERT INTO `acore_string` (`entry`,`content_default`) VALUES
 -- battleground_template
 DELETE FROM `battleground_template` WHERE id=108;
 INSERT INTO `battleground_template` (`id`,`MinPlayersPerTeam`,`MaxPlayersPerTeam`,`MinLvl`,`MaxLvl`,`AllianceStartLoc`,`AllianceStartO`,`HordeStartLoc`,`HordeStartO`,`StartMaxDist`,`Weight`,`ScriptName`,`Comment`) VALUES
-(108,5,10,85,85,1726,2.57218,1727,6.16538,120,1,'','Twin Peaks');
+(108,5,10,10,80,1726,2.57218,1727,6.16538,120,1,'','Twin Peaks');
 
 -- gameobjects data
 DELETE FROM `gameobject_template` WHERE entry IN (207075, 207076, 206653, 206654, 206655, 208205, 208206, 208207, 208208, 208209);
