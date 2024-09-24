@@ -529,7 +529,6 @@ bool BattlegroundTP::UpdatePlayerScore(Player* player, uint32 type, uint32 value
             player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BG_OBJECTIVE_CAPTURE, TP_OBJECTIVE_RETURN_FLAG);
             break;
         default:
-            Battleground::UpdatePlayerScore(player, type, value, doAddHonor);
             break;
     }
 
