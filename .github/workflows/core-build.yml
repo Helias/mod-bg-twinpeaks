@@ -1,0 +1,13 @@
+name: core-build
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+
+jobs:
+  build:
+    uses: azerothcore/reusable-workflows/.github/workflows/core_build_modules.yml@main
+    with:
+      module_repo: ${{ github.event.repository.name }}
+      module_path: server-side/mod-bg-twinpeaks
