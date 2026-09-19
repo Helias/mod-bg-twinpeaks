@@ -19,6 +19,7 @@
 
 #include "ScriptMgr.h"
 #include "Config.h"
+#include "SpellMgr.h"
 
 // adding Battleground to the core battlegrounds list
 BattlegroundTypeId BATTLEGROUND_TP = BattlegroundTypeId(108); // value from BattlemasterList.dbc
@@ -83,7 +84,7 @@ void BattlegroundTP::PostUpdateImpl(uint32 diff)
         {
             case BG_TP_EVENT_UPDATE_GAME_TIME:
                 UpdateWorldState(BG_TP_STATE_TIMER, GetMatchTime());
-                _bgEvents.ScheduleEvent(BG_TP_EVENT_UPDATE_GAME_TIME, ((BG_TP_TOTAL_GAME_TIME - GetStartTime()) % (MINUTE*IN_MILLISECONDS)) + 1);
+                _bgEvents.ScheduleEvent(BG_TP_EVENT_UPDATE_GAME_TIME, Milliseconds(((BG_TP_TOTAL_GAME_TIME - GetStartTime()) % (MINUTE*IN_MILLISECONDS)) + 1));
                 break;
             case BG_TP_EVENT_NO_TIME_LEFT:
                 if (GetTeamScore(TEAM_ALLIANCE) == GetTeamScore(TEAM_HORDE))
@@ -152,8 +153,8 @@ void BattlegroundTP::StartingEventOpenDoors()
     // players joining later are not egible
     //StartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, TP_EVENT_START_BATTLE);
     UpdateWorldState(BG_TP_STATE_TIMER_ACTIVE, 1);
-    _bgEvents.ScheduleEvent(BG_TP_EVENT_UPDATE_GAME_TIME, 0);
-    _bgEvents.ScheduleEvent(BG_TP_EVENT_NO_TIME_LEFT, BG_TP_TOTAL_GAME_TIME - 2*MINUTE*IN_MILLISECONDS); // 27 - 2 = 25 minutes
+    _bgEvents.ScheduleEvent(BG_TP_EVENT_UPDATE_GAME_TIME, 0ms);
+    _bgEvents.ScheduleEvent(BG_TP_EVENT_NO_TIME_LEFT, Milliseconds(BG_TP_TOTAL_GAME_TIME - 2*MINUTE*IN_MILLISECONDS)); // 27 - 2 = 25 minutes
 }
 
 void BattlegroundTP::AddPlayer(Player* player)
@@ -220,7 +221,7 @@ void BattlegroundTP::EventPlayerCapturedFlag(Player* player)
         EndBattleground(GetTeamScore(TEAM_HORDE) == BG_TP_MAX_TEAM_SCORE ? TEAM_HORDE : TEAM_ALLIANCE);
     }
     else
-        _bgEvents.ScheduleEvent(BG_TP_EVENT_RESPAWN_BOTH_FLAGS, BG_TP_FLAG_RESPAWN_TIME);
+        _bgEvents.ScheduleEvent(BG_TP_EVENT_RESPAWN_BOTH_FLAGS, Milliseconds(BG_TP_FLAG_RESPAWN_TIME));
 
     _bgEvents.CancelEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT10);
     _bgEvents.CancelEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT15);
@@ -245,14 +246,14 @@ void BattlegroundTP::EventPlayerDroppedFlag(Player* player)
         UpdateFlagState(TEAM_HORDE, BG_TP_FLAG_STATE_ON_GROUND);
         player->CastSpell(player, BG_TP_SPELL_HORDE_FLAG_DROPPED, true);
         SendBroadcastText(LANG_BG_TP_DROPPED_HF, CHAT_MSG_BG_SYSTEM_HORDE, player);
-        _bgEvents.RescheduleEvent(BG_TP_EVENT_HORDE_DROP_FLAG, BG_TP_FLAG_DROP_TIME);
+        _bgEvents.RescheduleEvent(BG_TP_EVENT_HORDE_DROP_FLAG, Milliseconds(BG_TP_FLAG_DROP_TIME));
     }
     else
     {
         UpdateFlagState(TEAM_ALLIANCE, BG_TP_FLAG_STATE_ON_GROUND);
         player->CastSpell(player, BG_TP_SPELL_ALLIANCE_FLAG_DROPPED, true);
         SendBroadcastText(LANG_BG_TP_DROPPED_AF, CHAT_MSG_BG_SYSTEM_ALLIANCE, player);
-        _bgEvents.RescheduleEvent(BG_TP_EVENT_ALLIANCE_DROP_FLAG, BG_TP_FLAG_DROP_TIME);
+        _bgEvents.RescheduleEvent(BG_TP_EVENT_ALLIANCE_DROP_FLAG, Milliseconds(BG_TP_FLAG_DROP_TIME));
     }
 }
 
@@ -277,8 +278,8 @@ void BattlegroundTP::EventPlayerClickedOnFlag(Player* player, GameObject* gameOb
 
         if (GetFlagState(TEAM_HORDE) != BG_TP_FLAG_STATE_ON_BASE)
         {
-            _bgEvents.RescheduleEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT10, BG_TP_SPELL_FORCE_TIME);
-            _bgEvents.RescheduleEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT15, BG_TP_SPELL_BRUTAL_TIME);
+            _bgEvents.RescheduleEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT10, Milliseconds(BG_TP_SPELL_FORCE_TIME));
+            _bgEvents.RescheduleEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT15, Milliseconds(BG_TP_SPELL_BRUTAL_TIME));
         }
         return;
     }
@@ -297,8 +298,8 @@ void BattlegroundTP::EventPlayerClickedOnFlag(Player* player, GameObject* gameOb
 
         if (GetFlagState(TEAM_ALLIANCE) != BG_TP_FLAG_STATE_ON_BASE)
         {
-            _bgEvents.RescheduleEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT10, BG_TP_SPELL_FORCE_TIME);
-            _bgEvents.RescheduleEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT15, BG_TP_SPELL_BRUTAL_TIME);
+            _bgEvents.RescheduleEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT10, Milliseconds(BG_TP_SPELL_FORCE_TIME));
+            _bgEvents.RescheduleEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT15, Milliseconds(BG_TP_SPELL_BRUTAL_TIME));
         }
         return;
     }
@@ -543,17 +544,17 @@ GraveyardStruct const* BattlegroundTP::GetClosestGraveyard(Player* player)
       return sGraveyard->GetGraveyard(player->GetTeamId() == TEAM_ALLIANCE ? TP_GRAVEYARD_FLAGROOM_ALLIANCE : TP_GRAVEYARD_FLAGROOM_HORDE);
 }
 
-void BattlegroundTP::FillInitialWorldStates(WorldPacket& data)
+void BattlegroundTP::FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet)
 {
-  data << uint32(BG_TP_FLAG_CAPTURES_ALLIANCE) << uint32(GetTeamScore(TEAM_ALLIANCE));
-  data << uint32(BG_TP_FLAG_CAPTURES_HORDE) << uint32(GetTeamScore(TEAM_HORDE));
-  data << uint32(BG_TP_FLAG_CAPTURES_MAX) << uint32(BG_TP_MAX_TEAM_SCORE);
+  packet.Worldstates.emplace_back(BG_TP_FLAG_CAPTURES_ALLIANCE, GetTeamScore(TEAM_ALLIANCE));
+  packet.Worldstates.emplace_back(BG_TP_FLAG_CAPTURES_HORDE, GetTeamScore(TEAM_HORDE));
+  packet.Worldstates.emplace_back(BG_TP_FLAG_CAPTURES_MAX, BG_TP_MAX_TEAM_SCORE);
 
-  data << uint32(BG_TP_STATE_TIMER_ACTIVE) << uint32(GetStatus() == STATUS_IN_PROGRESS);
-  data << uint32(BG_TP_STATE_TIMER) << uint32(GetMatchTime());
+  packet.Worldstates.emplace_back(BG_TP_STATE_TIMER_ACTIVE, GetStatus() == STATUS_IN_PROGRESS);
+  packet.Worldstates.emplace_back(BG_TP_STATE_TIMER, GetMatchTime());
 
-  data << uint32(BG_TP_FLAG_STATE_HORDE) << uint32(GetFlagState(TEAM_HORDE));
-  data << uint32(BG_TP_FLAG_STATE_ALLIANCE) << uint32(GetFlagState(TEAM_ALLIANCE));
+  packet.Worldstates.emplace_back(BG_TP_FLAG_STATE_HORDE, GetFlagState(TEAM_HORDE));
+  packet.Worldstates.emplace_back(BG_TP_FLAG_STATE_ALLIANCE, GetFlagState(TEAM_ALLIANCE));
 }
 
 TeamId BattlegroundTP::GetPrematureWinner()
@@ -570,10 +571,10 @@ uint32 BattlegroundTP::GetAssaultSpellId() const
 {
     if ((!GetFlagPickerGUID(TEAM_ALLIANCE) && GetFlagState(TEAM_ALLIANCE) != BG_TP_FLAG_STATE_ON_GROUND) ||
         (!GetFlagPickerGUID(TEAM_HORDE) && GetFlagState(TEAM_HORDE) != BG_TP_FLAG_STATE_ON_GROUND) ||
-        _bgEvents.GetNextEventTime(BG_TP_EVENT_BOTH_FLAGS_KEPT10) > 0)
+        _bgEvents.HasTimeUntilEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT10))
     return 0;
 
-    return _bgEvents.GetNextEventTime(BG_TP_EVENT_BOTH_FLAGS_KEPT15) > 0 ? BG_TP_SPELL_FOCUSED_ASSAULT : BG_TP_SPELL_BRUTAL_ASSAULT;
+    return _bgEvents.HasTimeUntilEvent(BG_TP_EVENT_BOTH_FLAGS_KEPT15) ? BG_TP_SPELL_FOCUSED_ASSAULT : BG_TP_SPELL_BRUTAL_ASSAULT;
 }
 
 void BattlegroundTP::RemoveAssaultAuras()
@@ -635,9 +636,9 @@ void AddTwinPeaksScripts() {
 		}
 	};
 
-	Player::bgZoneIdToFillWorldStates[5005] = [](Battleground* bg, WorldPacket& data) {
+	Player::bgZoneIdToFillWorldStates[5005] = [](Battleground* bg, WorldPackets::WorldState::InitWorldStates& packet) {
 		if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_TP) {
-			bg->FillInitialWorldStates(data);
+			bg->FillInitialWorldStates(packet);
 		}
 	};
 }
