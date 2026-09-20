@@ -12,4 +12,4 @@ jobs:
     with:
       module_repo: ${{ github.event.repository.name }}
       module_path: server-side/mod-bg-twinpeaks
-      module_data: client-data.zip
+      module_data: https://github.com/Helias/mod-bg-twinpeaks/raw/scratch/module-data-e2e/client-data.zip
