@@ -235,7 +235,7 @@ class AC_GAME_API BattlegroundTP : public Battleground
         bool UpdatePlayerScore(Player* player, uint32 type, uint32 value, bool doAddHonor = true) override;
         void SetDroppedFlagGUID(ObjectGuid guid, TeamId teamId) override { _droppedFlagGUID[teamId] = guid; }
         ObjectGuid GetDroppedFlagGUID(TeamId teamId) const { return _droppedFlagGUID[teamId];}
-        void FillInitialWorldStates(WorldPacket& data) override;
+        void FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet) override;
 
         /* Scorekeeping */
         void AddPoints(TeamId teamId, uint32 points) { m_TeamScores[teamId] += points; }
