@@ -608,7 +608,7 @@ class TwinPeaksWorld : public WorldScript
     	TwinPeaksWorld() : WorldScript("TwinPeaksWorld") { }
 };
 
-void AddTwinPeaksScripts() {
+void Addmod_bg_twinpeaksScripts() {
 	new TwinPeaksWorld();
 
 	// Add Twin Peaks to battleground list
